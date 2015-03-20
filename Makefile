@@ -26,5 +26,5 @@ install: libcJSON.so
 	install -m0644 cJSON.h $(PREFIX)/include/
 	ldconfig
 
-test:
+test: test.c
 	$(CC) -o test test.c -lcJSON -lm -L$(PREFIX)/lib/ -I$(PREFIX)/include/
