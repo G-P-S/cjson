@@ -18,7 +18,7 @@ cJSON.o: cJSON.c
 	$(CC) $(CFLAGS) $(CFLAGS_EXTRA) -c $< $(LIBS)
 
 clean:
-	rm -f *.o *.so test
+	rm -f *.o *.so *.a test
 
 install: libcJSON.so
 	install -m0755 libcJSON.so $(PREFIX)/lib/
