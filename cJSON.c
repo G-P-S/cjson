@@ -126,12 +126,20 @@ static const char *parse_number(cJSON *item,const char *num)
 	return num;
 }
 
+int IsFpItem(cJSON* item)
+{	double d=item->valuedouble;
+    if (fabs(((double)item->valueint64)-d)<=DBL_EPSILON && d<=LLONG_MAX && d>=LLONG_MIN)
+    {   return 0;
+    }
+    return 1;
+}
+
 /* Render the number nicely from the given item into a string. */
 static char *print_number(cJSON *item)
 {
 	char *str;
 	double d=item->valuedouble;
-	if (fabs(((double)item->valueint64)-d)<=DBL_EPSILON && d<=LLONG_MAX && d>=LLONG_MIN)
+    if(IsFpItem(item))
 	{
 		str=(char*)cJSON_malloc(21);	/* 2^64+1 can be represented in 21 chars. */
 #ifdef NO_LLD_SPRINTF
