@@ -38,6 +38,7 @@ extern "C"
 #define cJSON_Object 6
 	
 #define cJSON_IsReference 256
+#define cJSON_StringIsConst 512
 
 /* The cJSON structure: */
 typedef struct cJSON {
@@ -136,8 +137,6 @@ extern void cJSON_Minify(char *json);
 
 /* When assigning an integer value, it needs to be propagated to valuedouble too. */
 #define cJSON_SetIntValue(object,val)			((object)?(object)->valueint=(object)->valuedouble=(val):(val))
-    
-extern int IsFpItem(cJSON* item);
 
 #ifdef __cplusplus
 }

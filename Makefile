@@ -27,4 +27,4 @@ install: libcJSON.so
 	ldconfig
 
 test: test.c
-	$(CC) -o test test.c -lcJSON -lm -L$(PREFIX)/lib/ -I$(PREFIX)/include/
+	$(CC) -o test test.c $(CFLAGS) $(CFLAGS_EXTRA) -lcJSON -lm -L$(PREFIX)/lib/ -I$(PREFIX)/include/
