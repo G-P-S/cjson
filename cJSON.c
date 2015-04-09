@@ -114,9 +114,21 @@ static const char *parse_number(cJSON *item,const char *num)
 	return num;
 }
 
-static int pow2gt (int x)	{	--x;	x|=x>>1;	x|=x>>2;	x|=x>>4;	x|=x>>8;	x|=x>>16;	return x+1;	}
+static int pow2gt (int x)
+{	--x;
+    x|=x>>1;
+    x|=x>>2;
+    x|=x>>4;
+    x|=x>>8;
+    x|=x>>16;
+    return x+1;
+}
 
-typedef struct {char *buffer; int length; int offset; } printbuffer;
+typedef struct
+{   char *buffer;
+    int length;
+    int offset;
+} printbuffer;
 
 static char* ensure(printbuffer *p,int needed)
 {
@@ -140,7 +152,7 @@ static int update(printbuffer *p)
 	char *str;
 	if (!p || !p->buffer) return 0;
 	str=p->buffer+p->offset;
-	return p->offset+strlen(str);
+	return p->offset + (int) strlen(str);
 }
 
 /* Render the number nicely from the given item into a string. */
@@ -251,12 +263,14 @@ static const char *parse_string(cJSON *item,const char *str)
 /* Render the cstring provided to an escaped version that can be printed. */
 static char *print_string_ptr(const char *str,printbuffer *p)
 {
-	const char *ptr;char *ptr2,*out;int len=0,flag=0;unsigned char token;
+	const char *ptr;char *ptr2,*out;
+    int len=0,flag=0;
+    unsigned char token;
 	
 	for (ptr=str;*ptr;ptr++) flag|=((*ptr>0 && *ptr<32)||(*ptr=='\"')||(*ptr=='\\'))?1:0;
 	if (!flag)
 	{
-		len=ptr-str;
+		len=(int) (ptr-str);
 		if (p) out=ensure(p,len+3);
 		else		out=(char*)cJSON_malloc(len+3);
 		if (!out) return 0;
