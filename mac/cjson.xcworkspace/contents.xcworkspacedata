@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:cjson/cjson.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:simple_test/simple_test.xcodeproj">
+   </FileRef>
+</Workspace>

@@ -162,7 +162,7 @@ static char *print_number(cJSON *item,printbuffer *p)
 	char *str=0;
 	char decimalprecisionStr[SIZE_T_BUFFER];
 	char format[10];
-	size_t formatLen = 0;
+//	size_t formatLen = 0;
 	double d=item->valuedouble;
 	size_t decimalprecision = item->decimalprecision;
 	if (d==0)
@@ -187,7 +187,7 @@ static char *print_number(cJSON *item,printbuffer *p)
 			else if (fabs(d)<1.0e-6 || fabs(d)>1.0e9)               sprintf(str,"%e",d);
 			else if (decimalprecision == DEFAULT_DECIMAL_PRECISION) sprintf(str,"%0.36f",d);
 			else {
-				sprintf(decimalprecisionStr, "%d", decimalprecision);                           // Convert formatting precision number to string
+				sprintf(decimalprecisionStr, "%zu", decimalprecision);                           // Convert formatting precision number to string
 				format[0] = '\0';
 				strcat(format, "%."); strcat(format, decimalprecisionStr); strcat(format, "f"); // Create format --> %.[precision]f
 				sprintf(str, format, d);                                                        // Create formatted string
