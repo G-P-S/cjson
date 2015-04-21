@@ -40,6 +40,9 @@ extern "C"
 #define cJSON_IsReference 256
 #define cJSON_StringIsConst 512
 
+#define DEFAULT_DECIMAL_PRECISION -1
+#define SIZE_T_BUFFER (CHAR_BIT * sizeof(size_t) - 1) / 3 + 2
+
 /* The cJSON structure: */
 typedef struct cJSON {
 	struct cJSON *next,*prev;	/* next/prev allow you to walk array/object chains. Alternatively, use GetArraySize/GetArrayItem/GetObjectItem */
@@ -50,6 +53,7 @@ typedef struct cJSON {
 	char *valuestring;			/* The item's string, if type==cJSON_String */
 	int valueint;				/* The item's number, if type==cJSON_Number */
 	double valuedouble;			/* The item's number, if type==cJSON_Number */
+	size_t decimalprecision;	/* The number of decimal places to print, if type==cJSON_Number */
 
 	char *string;				/* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
 } cJSON;
@@ -90,6 +94,7 @@ extern cJSON *cJSON_CreateTrue(void);
 extern cJSON *cJSON_CreateFalse(void);
 extern cJSON *cJSON_CreateBool(int b);
 extern cJSON *cJSON_CreateNumber(double num);
+extern cJSON *cJSON_CreateNumberAndFormat(double num, size_t decformat);
 extern cJSON *cJSON_CreateString(const char *string);
 extern cJSON *cJSON_CreateArray(void);
 extern cJSON *cJSON_CreateObject(void);
@@ -136,6 +141,7 @@ extern void cJSON_Minify(char *json);
 #define cJSON_AddFalseToObject(object,name)		cJSON_AddItemToObject(object, name, cJSON_CreateFalse())
 #define cJSON_AddBoolToObject(object,name,b)	cJSON_AddItemToObject(object, name, cJSON_CreateBool(b))
 #define cJSON_AddNumberToObject(object,name,n)	cJSON_AddItemToObject(object, name, cJSON_CreateNumber(n))
+#define cJSON_AddNumberAndFormatToObject(object,name,n,f)	cJSON_AddItemToObject(object, name, cJSON_CreateNumberAndFormat(n,f))
 #define cJSON_AddStringToObject(object,name,s)	cJSON_AddItemToObject(object, name, cJSON_CreateString(s))
 
 /* When assigning an integer value, it needs to be propagated to valuedouble too. */
