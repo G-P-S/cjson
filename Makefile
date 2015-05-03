@@ -4,11 +4,17 @@ CFLAGS ?=
 CFLAGS_EXTRA := -fPIC
 LDFLAGS += -shared 
 LIBS = -lm
+UNAME = $(uname)
+ifeq ($(UNAME),Darwin)
+		AR := ar rcs
+else
+		AR := libtool -o
+endif
 
 all:	libcJSON.so libcJSON.a
 
 libcJSON.a: cJSON.o
-	ar rcs $@ $^
+	$(AR) $@ $^
 
 libcJSON.so: cJSON.o
 	#$(LD) $(LDFLAGS) -o $@ $^
