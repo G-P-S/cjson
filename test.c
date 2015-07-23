@@ -157,6 +157,8 @@ int main (int argc, const char * argv[]) {
 
 	/* Now some samplecode for building objects concisely: */
 	create_objects();
-	
+	char text6[]="{ \"big int\":  4000000000, \"minus10\": -10000000000  }";
+	puts("long long int test:");	
+	doit(text6);
 	return 0;
 }
