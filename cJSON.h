@@ -36,6 +36,7 @@ extern "C"
 #define cJSON_String 4
 #define cJSON_Array 5
 #define cJSON_Object 6
+#define cJSON_LargeNumber 7
 	
 #define cJSON_IsReference 256
 #define cJSON_StringIsConst 512
@@ -88,6 +89,7 @@ extern cJSON *cJSON_CreateTrue(void);
 extern cJSON *cJSON_CreateFalse(void);
 extern cJSON *cJSON_CreateBool(int b);
 extern cJSON *cJSON_CreateNumber(double num);
+extern cJSON *cJSON_CreateLargeNumber(long long num);
 extern cJSON *cJSON_CreateString(const char *string);
 extern cJSON *cJSON_CreateArray(void);
 extern cJSON *cJSON_CreateObject(void);
@@ -132,6 +134,7 @@ extern void cJSON_Minify(char *json);
 #define cJSON_AddFalseToObject(object,name)		cJSON_AddItemToObject(object, name, cJSON_CreateFalse())
 #define cJSON_AddBoolToObject(object,name,b)	cJSON_AddItemToObject(object, name, cJSON_CreateBool(b))
 #define cJSON_AddNumberToObject(object,name,n)	cJSON_AddItemToObject(object, name, cJSON_CreateNumber(n))
+#define cJSON_AddLargeNumberToObject(object,name,n)	cJSON_AddItemToObject(object, name, cJSON_CreateLargeNumber(n))
 #define cJSON_AddStringToObject(object,name,s)	cJSON_AddItemToObject(object, name, cJSON_CreateString(s))
 
 /* When assigning an integer value, it needs to be propagated to valuedouble too. */
