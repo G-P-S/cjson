@@ -120,8 +120,17 @@ static const char *parse_number(cJSON *item,const char *num)
 	n=sign*n*pow(10.0,(scale+subscale*signsubscale));	/* number = +/- number.fraction * 10^+/- exponent */
 	
 	item->valuedouble=n;
-	item->valueint=(long long)(n + 0.5);
-	item->type=cJSON_Number;
+    /* if it's not a double and the number is larger than 32 bits, use LargeNumber as the type */
+    if (!isDouble && (n > 4294967295))
+    {
+        item->valueint = lln;
+        item->type=cJSON_LargeNumber;
+    }
+    else
+    {
+        item->valueint=(long long)(n + 0.01);
+        item->type=cJSON_Number;
+    }
 	return num;
 }
 
@@ -171,7 +180,12 @@ static char *print_number(cJSON *item,printbuffer *p)
 {
 	char *str=0;
 	double d=item->valuedouble;
-	if (fabs(((double)item->valueint)-d)<=DBL_EPSILON && d>LLONG_MAX && d>=LLONG_MIN)
+    if (((item->type)&255) == cJSON_LargeNumber)
+    {
+		str=(char*)cJSON_malloc(21);	/* 2^64+1 can be represented in 21 chars. */
+		if (str) sprintf(str,"%lld",item->valueint);
+    }
+	else if (fabs(((double)item->valueint)-d)<=DBL_EPSILON && d>LLONG_MAX && d>=LLONG_MIN)
 	{
 		str=(char*)cJSON_malloc(21);	/* 2^64+1 can be represented in 21 chars. */
 		if (str) sprintf(str,"%lld",item->valueint);
@@ -403,6 +417,7 @@ static char *print_value(cJSON *item,int depth,int fmt,printbuffer *p)
 			case cJSON_False:	{out=ensure(p,6);	if (out) strcpy(out,"false");	break;}
 			case cJSON_True:	{out=ensure(p,5);	if (out) strcpy(out,"true");	break;}
 			case cJSON_Number:	out=print_number(item,p);break;
+			case cJSON_LargeNumber:	out=print_number(item,p);break;
 			case cJSON_String:	out=print_string(item,p);break;
 			case cJSON_Array:	out=print_array(item,depth,fmt,p);break;
 			case cJSON_Object:	out=print_object(item,depth,fmt,p);break;
@@ -416,6 +431,7 @@ static char *print_value(cJSON *item,int depth,int fmt,printbuffer *p)
 			case cJSON_False:	out=cJSON_strdup("false");break;
 			case cJSON_True:	out=cJSON_strdup("true"); break;
 			case cJSON_Number:	out=print_number(item,0);break;
+			case cJSON_LargeNumber:	out=print_number(item,0);break;
 			case cJSON_String:	out=print_string(item,0);break;
 			case cJSON_Array:	out=print_array(item,depth,fmt,0);break;
 			case cJSON_Object:	out=print_object(item,depth,fmt,0);break;
@@ -715,7 +731,8 @@ cJSON *cJSON_CreateNull(void)					{cJSON *item=cJSON_New_Item();if(item)item->ty
 cJSON *cJSON_CreateTrue(void)					{cJSON *item=cJSON_New_Item();if(item)item->type=cJSON_True;return item;}
 cJSON *cJSON_CreateFalse(void)					{cJSON *item=cJSON_New_Item();if(item)item->type=cJSON_False;return item;}
 cJSON *cJSON_CreateBool(int b)					{cJSON *item=cJSON_New_Item();if(item)item->type=b?cJSON_True:cJSON_False;return item;}
-cJSON *cJSON_CreateNumber(double num)			{cJSON *item=cJSON_New_Item();if(item){item->type=cJSON_Number;item->valuedouble=num;item->valueint=(long long)(num+0.5);}return item;}
+cJSON *cJSON_CreateNumber(double num)			{cJSON *item=cJSON_New_Item();if(item){item->type=cJSON_Number;item->valuedouble=num;item->valueint=(long long)(num+0.01);}return item;}
+cJSON *cJSON_CreateLargeNumber(long long num)	{cJSON *item=cJSON_New_Item();if(item){item->type=cJSON_LargeNumber;item->valuedouble=num;item->valueint=num;}return item;}
 cJSON *cJSON_CreateString(const char *string)	{cJSON *item=cJSON_New_Item();if(item){item->type=cJSON_String;item->valuestring=cJSON_strdup(string);}return item;}
 cJSON *cJSON_CreateArray(void)					{cJSON *item=cJSON_New_Item();if(item)item->type=cJSON_Array;return item;}
 cJSON *cJSON_CreateObject(void)					{cJSON *item=cJSON_New_Item();if(item)item->type=cJSON_Object;return item;}
