@@ -128,7 +128,7 @@ static const char *parse_number(cJSON *item,const char *num)
 	}
 	else
 	{
-		item->valueint=(long long)(n + 0.01);
+        item->valueint=(long long)(n + (0.5*sign));
 		item->type=cJSON_Number;
 	}
 	return num;
