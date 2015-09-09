@@ -128,7 +128,7 @@ static const char *parse_number(cJSON *item,const char *num)
 	}
 	else
 	{
-        item->valueint=(long long)(n + (0.5*sign));
+		item->valueint=(long long)(n + (0.01*sign));
 		item->type=cJSON_Number;
 	}
 	return num;
@@ -731,7 +731,24 @@ cJSON *cJSON_CreateNull(void)					{cJSON *item=cJSON_New_Item();if(item)item->ty
 cJSON *cJSON_CreateTrue(void)					{cJSON *item=cJSON_New_Item();if(item)item->type=cJSON_True;return item;}
 cJSON *cJSON_CreateFalse(void)					{cJSON *item=cJSON_New_Item();if(item)item->type=cJSON_False;return item;}
 cJSON *cJSON_CreateBool(int b)					{cJSON *item=cJSON_New_Item();if(item)item->type=b?cJSON_True:cJSON_False;return item;}
-cJSON *cJSON_CreateNumber(double num)			{cJSON *item=cJSON_New_Item();if(item){item->type=cJSON_Number;item->valuedouble=num;item->valueint=(long long)(num+0.01);}return item;}
+cJSON *cJSON_CreateNumber(double num)			
+{
+	cJSON *item=cJSON_New_Item();
+	if(item)
+	{
+		item->type=cJSON_Number;
+		item->valuedouble=num;
+		if (num > 0)  /* positive number */
+		{
+			item->valueint=(long long)(num+0.01);
+		}
+		else
+		{
+			item->valueint=(long long)(num-0.01);
+		}
+	}
+	return item;
+}
 cJSON *cJSON_CreateLargeNumber(long long num)	{cJSON *item=cJSON_New_Item();if(item){item->type=cJSON_LargeNumber;item->valuedouble=num;item->valueint=num;}return item;}
 cJSON *cJSON_CreateString(const char *string)	{cJSON *item=cJSON_New_Item();if(item){item->type=cJSON_String;item->valuestring=cJSON_strdup(string);}return item;}
 cJSON *cJSON_CreateArray(void)					{cJSON *item=cJSON_New_Item();if(item)item->type=cJSON_Array;return item;}
