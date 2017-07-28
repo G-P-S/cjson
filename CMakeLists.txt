@@ -7,7 +7,7 @@ gopro_public_include_dirs(.)
 gopro_files(DIR . GROUP src
     cJSON.c
 )
-gopro_public_files(DIR . INSTALL_DIR include
+gopro_public_files(DIR . GROUP public_include INSTALL_DIR include
     cJSON.h
 )
 gopro_end_lib()
