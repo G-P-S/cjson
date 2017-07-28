@@ -3,14 +3,11 @@ list(APPEND CMAKE_MODULE_PATH ${GOPRO_TOOLS_DIR}/cmake)
 include("${GOPRO_TOOLS_DIR}/cmake/gopro.cmake")
 
 gopro_begin_lib(cjson GROUP 3rdparty)
-include_directories(.)
-gopro_public_header_dir(.)
-gopro_dir(. GROUP src)
-gopro_files(
+gopro_public_include_dirs(.)
+gopro_files(DIR . GROUP src
     cJSON.c
 )
-gopro_dir(. GROUP include)
-gopro_files(
+gopro_public_files(DIR . INSTALL_DIR include
     cJSON.h
 )
 gopro_end_lib()
