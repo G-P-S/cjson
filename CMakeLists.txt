@@ -4,7 +4,7 @@ include("${GOPRO_TOOLS_DIR}/cmake/gopro.cmake")
 
 gopro_begin_lib(cjson GROUP 3rdparty)
 gopro_public_include_dirs(.)
-gopro_libs(PLATFORM linux m)
+gopro_libs(m PLATFORMS linux)
 gopro_files(DIR . GROUP src
     cJSON.c
 )
